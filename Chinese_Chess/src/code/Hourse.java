@@ -1,7 +1,6 @@
 package code;
 
 public class Hourse extends Piece {
-
 	public Hourse(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
@@ -9,7 +8,7 @@ public class Hourse extends Piece {
 	// Hiển thị quân mã ra màn console
 	@Override
 	public String toString() {
-		return isRed ? "H" : "h";
+		return isRed ? red + "H" + reset : blue + "H" + reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không
@@ -20,7 +19,6 @@ public class Hourse extends Piece {
 			return false;
 		int dX = newX - x;
 		int dY = newY - y;
-
 		// Kiểm tra đường đi có phải theo hình chữ L hay không
 		if ((Math.abs(dX) == 1 && Math.abs(dY) == 2) || (Math.abs(dX) == 2 && Math.abs(dY) == 1)) {
 			// Kiểm tra đường đi có bị chặn hay không

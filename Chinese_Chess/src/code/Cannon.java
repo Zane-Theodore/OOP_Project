@@ -1,7 +1,6 @@
 package code;
 
 public class Cannon extends Piece {
-
 	public Cannon(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
@@ -9,16 +8,18 @@ public class Cannon extends Piece {
 	// Hiển thị quân pháo ra màn console
 	@Override
 	public String toString() {
-		return isRed ? "C" : "c";
+		return isRed ? red + "C" + reset : blue + "C" + reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không
 	@Override
 	public boolean isValidMove(int newX, int newY, Board board) {
+		// Không được đi vào ô đã có quân ta
+		if (board.getPiece(newX, newY) != null && board.getPiece(newX, newY).isRed == this.isRed)
+			return false;
 		// Quân pháo chỉ được đi thẳng hoặc ngang
 		if (x != newX && y != newY)
 			return false;
-
 		int countBetween = countPieceBetween(x, y, newX, newY, board);
 		// Trường hợp không ăn quân, thì số quân trên đường đi phải là 0
 		if (board.getPiece(newX, newY) == null) {
@@ -42,7 +43,6 @@ public class Cannon extends Piece {
 					count++;
 			}
 		}
-
 		// Đếm theo chiều dọc
 		else if (startY == endY) {
 			int minX = Math.min(startX, endX);
@@ -52,7 +52,6 @@ public class Cannon extends Piece {
 					count++;
 			}
 		}
-
 		return count;
 	}
 }

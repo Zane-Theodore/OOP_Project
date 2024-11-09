@@ -37,8 +37,7 @@ public class Board {
 		board[3][4] = new Soldier(3, 4, true);
 		board[3][6] = new Soldier(3, 6, true);
 		board[3][8] = new Soldier(3, 8, true);
-
-		// Bên đen
+		// Bên xanh
 		board[9][0] = new Rook(9, 0, false);
 		board[9][8] = new Rook(9, 8, false);
 		board[9][1] = new Hourse(9, 1, false);
@@ -61,17 +60,21 @@ public class Board {
 		return board[x][y];
 	}
 
-	// Vẽ lại bàn cờ
+	public void setPiece(int x, int y, Piece piece) {
+		board[x][y] = piece;
+	}
+
+	// Vẽ bàn cờ
 	public void drawBoard() {
 		for (int i = 0; i < col; i++) {
 			if (i == 0)
-				System.out.print(" ");
+				System.out.print("  ");
 			System.out.print(" " + i);
 		}
 		for (int i = 0; i < row; i++) {
 			if (i == 0)
-				System.out.print('\n');
-			System.out.print(i + " ");
+				System.out.print("\n  ---------------------\n");
+			System.out.print(i + "| ");
 			for (int j = 0; j < col; j++) {
 				if (board[i][j] == null) {
 					System.out.print(". ");
@@ -79,13 +82,15 @@ public class Board {
 					System.out.print(board[i][j] + " ");
 				}
 			}
-			System.out.print('\n');
+			System.out.print(" |\n");
 		}
+		System.out.print("  ---------------------\n\n");
 	}
 
 	// Di chuyển quân cờ
 	public boolean movePiece(int startX, int startY, int endX, int endY) {
 		Piece piece = getPiece(startX, startY);
+		// Kiểm tra xem quân cờ có di chuyển được đến vị trí mong muốn hay không
 		if (piece != null && piece.isValidMove(endX, endY, this)) {
 			Piece targetPiece = getPiece(endX, endY);
 			// Kiểm tra sự hợp lệ của vị trí cần đến
@@ -100,17 +105,70 @@ public class Board {
 		return false;
 	}
 
-	// Tìm vị trí quân tướng
-	public Piece findKing(boolean isRed) {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
+	// Kiểm tra xem tướng có bị chiếu không
+	public boolean isInCheck(boolean isRed) {
+		Piece general = findGeneral(isRed);
+		// Kiểm tra nếu có quân đối phương có thể tấn công tướng
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
 				Piece piece = board[i][j];
-				// Kiểm tra nếu quân cờ hiện tại là quân tướng của bên đang kiểm tra
-				if (piece != null && piece instanceof General && piece.isRed == isRed) {
-					return piece;
+				if (piece != null && piece.isRed != isRed) {
+					if (piece.isValidMove(general.x, general.y, this)) {
+						// Tướng bị chiếu
+						return true;
+					}
 				}
 			}
 		}
+		return false;
+	}
+
+	// Kiểm tra xem tướng có bị chiếu bí không
+	public boolean isInCheckMate(boolean isRed) {
+		if (!isInCheck(isRed)) {
+			// Nếu tướng không bị chiếu thì không phải chiếu bí
+			return false;
+		}
+		// Kiểm tra tất cả các quân cờ để tìm nước đi hợp lệ thoát khỏi chiếu
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				Piece piece = board[i][j];
+				if (piece != null && piece.isRed == isRed) {
+					// Kiểm tra tất cả các nước đi hợp lệ của quân cờ này
+					for (int k = 0; k < board.length; k++) {
+						for (int l = 0; l < board[k].length; l++) {
+							if (piece.isValidMove(k, l, this)) {
+								Piece tempPiece = board[k][l];
+								board[k][l] = piece;
+								board[i][j] = null;
+								if (!isInCheck(isRed)) {
+									board[i][j] = piece;
+									board[k][l] = tempPiece;
+									// Không phải chiếu bí
+									return false;
+								}
+								board[i][j] = piece;
+								board[k][l] = tempPiece;
+							}
+						}
+					}
+				}
+			}
+		}
+		// Không có nước đi nào hợp lệ để thoát chiếu => chiếu bí
+		return true;
+	}
+
+	// Tìm vị trí của tướng
+	private Piece findGeneral(boolean isRed) {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[i][j] != null && board[i][j].isRed == isRed && board[i][j] instanceof General) {
+					return board[i][j];
+				}
+			}
+		}
+		// Không tìm thấy tướng
 		return null;
 	}
 }

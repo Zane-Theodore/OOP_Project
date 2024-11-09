@@ -1,7 +1,6 @@
 package code;
 
 public class Rook extends Piece {
-
 	public Rook(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
@@ -9,7 +8,7 @@ public class Rook extends Piece {
 	// Hiển thị quân xe ra màn console
 	@Override
 	public String toString() {
-		return isRed ? "R" : "r";
+		return isRed ? red + "R" + reset : blue + "R" + reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không
@@ -21,7 +20,6 @@ public class Rook extends Piece {
 		// Quân xe chỉ được đi thẳng hoặc đi ngang
 		if (newX != x && newY != y)
 			return false;
-
 		// Kiểm tra xem đường đi có bị chặn hay không
 		// Đi ngang
 		if (newX == x) {

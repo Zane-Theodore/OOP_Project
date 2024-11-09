@@ -1,7 +1,6 @@
 package code;
 
 public class Soldier extends Piece {
-
 	public Soldier(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
@@ -9,7 +8,7 @@ public class Soldier extends Piece {
 	// Hiển thị quân tốt ra màn console
 	@Override
 	public String toString() {
-		return isRed ? "S" : "s";
+		return isRed ? red + "S" + reset : blue + "S" + reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

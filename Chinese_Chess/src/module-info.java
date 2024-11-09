@@ -4,5 +4,5 @@
 /**
  * 
  */
-module CK_23133058_TranThienPhuc {
+module Chinese_Chess {
 }
