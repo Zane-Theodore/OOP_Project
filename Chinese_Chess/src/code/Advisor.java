@@ -4,13 +4,13 @@ public class Advisor extends Piece {
 	public Advisor(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
-
+	
 	// Hiển thị quân sĩ ra màn console
 	@Override
 	public String toString() {
 		return isRed ? red + "A" + reset : blue + "A" + reset;
 	}
-
+	
 	// Kiểm tra nước đi có hợp lệ hay không
 	@Override
 	public boolean isValidMove(int newX, int newY, Board board) {

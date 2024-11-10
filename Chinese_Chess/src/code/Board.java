@@ -60,21 +60,20 @@ public class Board {
 		return board[x][y];
 	}
 
-	public void setPiece(int x, int y, Piece piece) {
-		board[x][y] = piece;
-	}
-
 	// Vẽ bàn cờ
 	public void drawBoard() {
 		for (int i = 0; i < col; i++) {
 			if (i == 0)
-				System.out.print("  ");
-			System.out.print(" " + i);
+				System.out.print("   ");
+			System.out.print(" " + (i + 1));
 		}
 		for (int i = 0; i < row; i++) {
 			if (i == 0)
-				System.out.print("\n  ---------------------\n");
-			System.out.print(i + "| ");
+				System.out.print("\n   -------------------\n");
+			if (i != 9)
+				System.out.print(" " + (i + 1) + "| ");
+			else
+				System.out.print("10| ");
 			for (int j = 0; j < col; j++) {
 				if (board[i][j] == null) {
 					System.out.print(". ");
@@ -82,9 +81,9 @@ public class Board {
 					System.out.print(board[i][j] + " ");
 				}
 			}
-			System.out.print(" |\n");
+			System.out.print("|\n");
 		}
-		System.out.print("  ---------------------\n\n");
+		System.out.print("   -------------------\n\n");
 	}
 
 	// Di chuyển quân cờ
@@ -109,8 +108,8 @@ public class Board {
 	public boolean isInCheck(boolean isRed) {
 		Piece general = findGeneral(isRed);
 		// Kiểm tra nếu có quân đối phương có thể tấn công tướng
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
 				Piece piece = board[i][j];
 				if (piece != null && piece.isRed != isRed) {
 					if (piece.isValidMove(general.x, general.y, this)) {
@@ -130,13 +129,13 @@ public class Board {
 			return false;
 		}
 		// Kiểm tra tất cả các quân cờ để tìm nước đi hợp lệ thoát khỏi chiếu
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
 				Piece piece = board[i][j];
 				if (piece != null && piece.isRed == isRed) {
 					// Kiểm tra tất cả các nước đi hợp lệ của quân cờ này
-					for (int k = 0; k < board.length; k++) {
-						for (int l = 0; l < board[k].length; l++) {
+					for (int k = 0; k < row; k++) {
+						for (int l = 0; l < col; l++) {
 							if (piece.isValidMove(k, l, this)) {
 								Piece tempPiece = board[k][l];
 								board[k][l] = piece;
@@ -161,8 +160,8 @@ public class Board {
 
 	// Tìm vị trí của tướng
 	private Piece findGeneral(boolean isRed) {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
 				if (board[i][j] != null && board[i][j].isRed == isRed && board[i][j] instanceof General) {
 					return board[i][j];
 				}

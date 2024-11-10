@@ -12,6 +12,10 @@ public class Game {
 	private ArrayList<String> historyMove;
 	// Mã màu vàng dành cho những cảnh báo
 	private String yellow = "\u001B[33m";
+	// mã màu đỏ, tượng trưng cho quân đỏ
+	private String red = "\u001B[31m";
+	// mã màu xanh tượng trưng cho quân xanh
+	private String blue = "\u001B[34m";
 	// Mã để reset màu
 	private String reset = "\u001B[0m";
 
@@ -29,7 +33,7 @@ public class Game {
 		while (true) {
 			System.out.print('\n');
 			board.drawBoard();
-			System.out.println("Lượt của " + (isRedTurn ? "bên đỏ" : "bên xanh"));
+			System.out.println("Lượt của bên " + (isRedTurn ? red + "đỏ" + reset : blue + "xanh" + reset));
 
 			// Kiểm tra xem người chơi hiện tại có bị chiếu hay không
 			if (board.isInCheck(isRedTurn)) {
@@ -82,8 +86,8 @@ public class Game {
 					board.drawBoard();
 					try {
 						System.out.print("Nhập vào tọa độ quân cờ bạn muốn di chuyển: ");
-						startX = sc.nextInt();
-						startY = sc.nextInt();
+						startX = sc.nextInt() - 1;
+						startY = sc.nextInt() - 1;
 						if (!isValidPosition(startX, startY)) {
 							System.out.println("Vị trí không hợp lệ.");
 						} else if (board.getPiece(startX, startY) == null) {
@@ -104,7 +108,7 @@ public class Game {
 				for (int i = 0; i < board.getRow(); i++) {
 					for (int j = 0; j < board.getCol(); j++) {
 						if (piece.isValidMove(i, j, board)) {
-							System.out.println("(" + i + ", " + j + ")");
+							System.out.println("(" + (i + 1) + ", " + (j + 1) + ")");
 						}
 					}
 				}
@@ -113,8 +117,8 @@ public class Game {
 				while (!isValidValue) {
 					try {
 						System.out.print("Nhập vào tọa độ bạn muốn đặt quân cờ: ");
-						endX = sc.nextInt();
-						endY = sc.nextInt();
+						endX = sc.nextInt() - 1;
+						endY = sc.nextInt() - 1;
 						if (!isValidPosition(endX, endY) || !piece.isValidMove(endX, endY, board)) {
 							System.out.println("Vị trí không hợp lệ.");
 						} else if ((board.getPiece(endX, endY) != null)
@@ -138,11 +142,12 @@ public class Game {
 					sc.nextLine();
 					continue;
 				}
-				System.out.println("Đã di chuyển quân cờ ở vị trí " + "(" + startX + ", " + startY + ") đến vị trí "
-						+ "(" + endX + ", " + endY + ")");
+				System.out.println("Đã di chuyển quân cờ ở vị trí " + "(" + (startX + 1) + ", " + (startY + 1)
+						+ ") đến vị trí " + "(" + (endX + 1) + ", " + (endY + 1) + ")");
 				// Lưu nước đi vào lịch sử
-				historyMove.add("Bên " + (isRedTurn ? "đỏ :" : "xanh:") + " đã di chuyển cờ ở vị trí " + "(" + startX
-						+ ", " + startY + ") đến vị trí " + "(" + endX + ", " + endY + ")");
+				historyMove
+						.add("Bên " + (isRedTurn ? "đỏ :" : "xanh:") + " đã di chuyển cờ ở vị trí " + "(" + (startX + 1)
+								+ ", " + (startY + 1) + ") đến vị trí " + "(" + (endX + 1) + ", " + (endY + 1) + ")");
 				// Đổi lượt đi
 				isRedTurn = !isRedTurn;
 				sc.nextLine();

@@ -10,7 +10,7 @@ public class Cannon extends Piece {
 	public String toString() {
 		return isRed ? red + "C" + reset : blue + "C" + reset;
 	}
-
+	
 	// Kiểm tra nước đi có hợp lệ hay không
 	@Override
 	public boolean isValidMove(int newX, int newY, Board board) {
