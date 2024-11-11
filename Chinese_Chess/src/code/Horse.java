@@ -1,7 +1,7 @@
 package code;
 
-public class Hourse extends Piece {
-	public Hourse(int x, int y, boolean isRed) {
+public class Horse extends Piece {
+	public Horse(int x, int y, boolean isRed) {
 		super(x, y, isRed);
 	}
 

@@ -5,7 +5,7 @@ public abstract class Piece {
 	protected int x;
 	// Tọa độ Y
 	protected int y;
-	// True nếu quân cờ là đỏ, false nếu quân cờ là xanh
+	// Kiểm tra xem quân cờ phải quân đỏ hay không
 	protected boolean isRed;
 	// mã màu đỏ, tượng trưng cho quân đỏ
 	protected String red = "\u001B[31m";

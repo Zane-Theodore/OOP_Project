@@ -23,8 +23,8 @@ public class Board {
 		// Bên đỏ
 		board[0][0] = new Rook(0, 0, true);
 		board[0][8] = new Rook(0, 8, true);
-		board[0][1] = new Hourse(0, 1, true);
-		board[0][7] = new Hourse(0, 7, true);
+		board[0][1] = new Horse(0, 1, true);
+		board[0][7] = new Horse(0, 7, true);
 		board[0][2] = new Elephant(0, 2, true);
 		board[0][6] = new Elephant(0, 6, true);
 		board[0][3] = new Advisor(0, 3, true);
@@ -40,8 +40,8 @@ public class Board {
 		// Bên xanh
 		board[9][0] = new Rook(9, 0, false);
 		board[9][8] = new Rook(9, 8, false);
-		board[9][1] = new Hourse(9, 1, false);
-		board[9][7] = new Hourse(9, 7, false);
+		board[9][1] = new Horse(9, 1, false);
+		board[9][7] = new Horse(9, 7, false);
 		board[9][2] = new Elephant(9, 2, false);
 		board[9][6] = new Elephant(9, 6, false);
 		board[9][3] = new Advisor(9, 3, false);
@@ -58,6 +58,14 @@ public class Board {
 
 	public Piece getPiece(int x, int y) {
 		return board[x][y];
+	}
+
+	public void setPiece(int x, int y, Piece piece) {
+		board[x][y] = piece;
+		if (piece != null) {
+			board[x][y].x = x;
+			board[x][y].y = y;
+		}
 	}
 
 	// Vẽ bàn cờ
@@ -87,21 +95,15 @@ public class Board {
 	}
 
 	// Di chuyển quân cờ
-	public boolean movePiece(int startX, int startY, int endX, int endY) {
+	public void movePiece(int startX, int startY, int endX, int endY) {
 		Piece piece = getPiece(startX, startY);
 		// Kiểm tra xem quân cờ có di chuyển được đến vị trí mong muốn hay không
 		if (piece != null && piece.isValidMove(endX, endY, this)) {
-			Piece targetPiece = getPiece(endX, endY);
-			// Kiểm tra sự hợp lệ của vị trí cần đến
-			if (targetPiece == null || (targetPiece.isRed != piece.isRed)) {
-				board[endX][endY] = piece;
-				board[startX][startY] = null;
-				board[endX][endY].x = endX;
-				board[endX][endY].y = endY;
-				return true;
-			}
+			board[endX][endY] = piece;
+			board[startX][startY] = null;
+			board[endX][endY].x = endX;
+			board[endX][endY].y = endY;
 		}
-		return false;
 	}
 
 	// Kiểm tra xem tướng có bị chiếu không

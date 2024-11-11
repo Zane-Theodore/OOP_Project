@@ -45,12 +45,10 @@ public class Game {
 					break;
 				}
 			}
-
 			startX = -1;
 			startY = -1;
 			endX = -1;
 			endY = -1;
-
 			// Lựa chọn hành động
 			isValidValue = false;
 			while (!isValidValue) {
@@ -77,7 +75,6 @@ public class Game {
 					System.out.println("Sai định dạng, hãy nhập lại.");
 				}
 			}
-
 			switch (yourChoice) {
 			case 1:
 				isValidValue = false;
@@ -132,13 +129,20 @@ public class Game {
 						sc.nextLine();
 					}
 				}
+				// Lưu lại quân cờ mục tiêu
+				Piece targetPiece = board.getPiece(endX, endY);
 				// Di chuyển quân cờ
 				board.movePiece(startX, startY, endX, endY);
 				// Kiểm tra xem nước đi đó có dẫn đến chiếu tướng cho người chơi hay không
 				if (board.isInCheck(isRedTurn)) {
 					System.out.println(yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ CHIẾU, HÃY XEM XÉT LẠI" + reset);
-					// Hoàn tác nước đi
-					board.movePiece(endX, endY, startX, startY);
+					// Nếu nước đi khiến người chơi bị chiếu
+					// Hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
+					board.setPiece(startX, startY, piece);
+					if (targetPiece != null)
+						board.setPiece(endX, endY, targetPiece);
+					else
+						board.setPiece(endX, endY, null);
 					sc.nextLine();
 					continue;
 				}
