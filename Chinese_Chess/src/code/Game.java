@@ -51,7 +51,11 @@ public class Game {
 				piece = board.getPiece(startX, startY);
 
 				// In ra các nước đi hợp lệ với quân cờ người chơi đã chọn
-				printValidMove();
+				if (!printValidMove()) {
+					System.out.println(Color.lightYellow
+							+ "Quân cờ hiện không thể di chuyển, hãy chọn lại quân cờ khác." + Color.reset);
+					continue;
+				}
 
 				// Nhập tọa độ muốn đặt quân cờ
 				inputTargetPiece(sc);
@@ -60,7 +64,7 @@ public class Game {
 
 				// Di chuyển quân cờ và kiểm tra độ an toàn của nước đi đó
 				if (movePieceAndCheckMove()) {
-					// Nếu gây ra chiếu thì lựa chọn lại
+					// Nếu gây ra chiếu hoặc lộ tướng thì lựa chọn lại
 					continue;
 				}
 
@@ -118,13 +122,13 @@ public class Game {
 		printGameStatus();
 		// Kiểm tra xem người chơi hiện tại có đang chiếu bí hay không,
 		// nếu có trả về true
-		if (board.isInCheckMate(isRedTurn)) {
+		if (isInCheckMate(isRedTurn)) {
 			System.out.print(
 					Color.yellow + "NGƯỜI CHƠI " + (!isRedTurn ? "ĐỎ" : "XANH") + " THẮNG DO CHIẾU BÍ!!" + Color.reset);
 			return true;
 		}
 		// Kiểm tra xem người chơi hiện tại có đang bị chiếu hay không
-		if (board.isInCheck(isRedTurn)) {
+		if (isInCheck(isRedTurn)) {
 			System.out.println(
 					Color.yellow + "NGƯỜI CHƠI " + (isRedTurn ? "ĐỎ" : "XANH") + " ĐANG BỊ CHIẾU!!" + Color.reset);
 		}
@@ -132,8 +136,8 @@ public class Game {
 		return false;
 	}
 
-	// Hàm in ra menu lựa chọn
-	private void printMenu() {
+	// Hàm in ra menu chính
+	private void printMainMenu() {
 		System.out.println("Hãy chọn hành động:");
 		System.out.println("[1] Di chuyển quân cờ");
 		System.out.println("[2] Xem lại lịch sử di chuyển");
@@ -142,30 +146,23 @@ public class Game {
 	// Hàm lựa chọn hành động trong mỗi lượt chơi
 	private int getChoice(Scanner sc) {
 		setIsValidValue();
-		String input;
 		int yourChoice = -1;
 		while (!isValidValue) {
 			try {
-				printMenu();
+				printMainMenu();
 				System.out.print("Lựa chọn của bạn là: ");
-				input = sc.next();
-				sc.nextLine();
-
-				if (input.isEmpty()) {
-					System.out.println(Color.lightYellow + "\nKhông được bỏ trống lựa chọn.\n" + Color.reset);
-					printGameStatus();
-					continue;
-				}
-				yourChoice = Integer.parseInt(input);
+				yourChoice = sc.nextInt();
 				if (yourChoice >= 1 && yourChoice <= 2) {
 					isValidValue = true;
 				} else {
 					System.out.println(Color.lightYellow + "\nLựa chọn không hợp lệ, hãy chọn lại.\n" + Color.reset);
 					printGameStatus();
+					sc.nextLine();
 				}
-			} catch (NumberFormatException e) {
+			} catch (InputMismatchException e) {
 				System.out.println(Color.lightYellow + "\nSai định dạng, hãy nhập lại.\n" + Color.reset);
 				printGameStatus();
+				sc.nextLine();
 			}
 		}
 		return yourChoice;
@@ -202,6 +199,7 @@ public class Game {
 		setIsValidValue();
 		while (!isValidValue) {
 			try {
+				// board.drawBoard();
 				System.out.print("Nhập vào tọa độ bạn muốn đặt quân cờ: ");
 				endX = sc.nextInt() - 1;
 				endY = sc.nextInt() - 1;
@@ -220,15 +218,18 @@ public class Game {
 	}
 
 	// Hàm in ra các nước đi hợp lệ với quân cờ đã chọn
-	private void printValidMove() {
+	private boolean printValidMove() {
+		boolean flag = false;
 		System.out.println("Các nước đi hợp lệ với quân cờ bạn chọn là: ");
 		for (int i = 0; i < board.getRow(); i++) {
 			for (int j = 0; j < board.getCol(); j++) {
 				if (piece.isValidMove(i, j, board)) {
+					flag = true;
 					System.out.println("(" + (i + 1) + ", " + (j + 1) + ")");
 				}
 			}
 		}
+		return flag;
 	}
 
 	// In ra thông báo nước đi
@@ -239,11 +240,88 @@ public class Game {
 		return message;
 	}
 
-	// Di chuyển quân cờ và kiểm tra chiếu sau nước đi đó
+	// Hàm kiểm tra có lộ mặt tướng hay không
+	private boolean isGeneralInLineOfSight() {
+		Piece redGeneral = board.findGeneral(true);
+		Piece blueGeneral = board.findGeneral(false);
+		// Kiểm tra nếu hai tướng nằm trên cùng một cột
+		if (redGeneral.y == blueGeneral.y) {
+			int start = redGeneral.x + 1;
+			int end = blueGeneral.x;
+			int y = redGeneral.y;
+			// Kiểm tra xem có quân cờ nào chặn giữa hai tướng hay không
+			for (int i = start; i < end; i++) {
+				if (board.getPiece(i, y) != null) {
+					return false;
+				}
+			}
+			// Nếu không có quân cờ nào chặn, hai tướng lộ mặt nhau
+			return true;
+		}
+		return false;
+	}
+
+	// Kiểm tra xem tướng có bị chiếu không
+	private boolean isInCheck(boolean isRed) {
+		Piece general = board.findGeneral(isRed);
+		// Kiểm tra nếu có quân đối phương có thể tấn công tướng
+		for (int i = 0; i < board.getRow(); i++) {
+			for (int j = 0; j < board.getCol(); j++) {
+				Piece piece = board.getPiece(i, j);
+				if (piece != null && piece.isRed != isRed) {
+					if (piece.isValidMove(general.x, general.y, board)) {
+						// Tướng bị chiếu
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	// Kiểm tra xem tướng có bị chiếu bí không
+	private boolean isInCheckMate(boolean isRed) {
+		if (!isInCheck(isRed)) {
+			// Nếu tướng không bị chiếu thì không phải chiếu bí
+			return false;
+		}
+		// Kiểm tra tất cả các quân cờ để tìm nước đi hợp lệ thoát khỏi chiếu
+		for (int i = 0; i < board.getRow(); i++) {
+			for (int j = 0; j < board.getCol(); j++) {
+				Piece piece = board.getPiece(i, j);
+				if (piece != null && piece.isRed == isRed) {
+					// Kiểm tra tất cả các nước đi hợp lệ của quân cờ này
+					for (int k = 0; k < board.getRow(); k++) {
+						for (int l = 0; l < board.getCol(); l++) {
+							if (piece.isValidMove(k, l, board)) {
+								Piece tempPiece = board.getPiece(k, l);
+								board.setPiece(k, l, piece);
+								board.setPiece(i, j, null);
+								if (!isInCheck(isRed) && !isGeneralInLineOfSight()) {
+									board.setPiece(i, j, piece);
+									board.setPiece(k, l, tempPiece);
+									// Không phải chiếu bí
+									return false;
+								}
+								board.setPiece(i, j, piece);
+								board.setPiece(k, l, tempPiece);
+							}
+						}
+					}
+				}
+			}
+		}
+		// Không có nước đi nào hợp lệ để thoát chiếu => chiếu bí
+		return true;
+	}
+
+	// Di chuyển quân cờ và kiểm tra sau nước đi đó
 	private boolean movePieceAndCheckMove() {
+		// Di chuyển quân cờ
 		board.movePiece(startX, startY, endX, endY);
-		if (board.isInCheck(isRedTurn)) {
-			System.out.println(Color.yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ CHIẾU, HÃY XEM XÉT LẠI" + Color.reset);
+		// Kiểm tra
+		if (isInCheck(isRedTurn)) {
+			System.out.println(Color.yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ CHIẾU, HÃY XEM XÉT LẠI." + Color.reset);
 			// Nếu nước đi khiến người chơi bị chiếu
 			// Hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
 			board.setPiece(startX, startY, piece);
@@ -253,6 +331,18 @@ public class Game {
 				board.setPiece(endX, endY, null);
 			return true;
 		}
+		if (isGeneralInLineOfSight()) {
+			System.out
+					.println(Color.yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ LỘ MẶT TƯỚNG, HÃY XEM XÉT LẠI." + Color.reset);
+			// Hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
+			board.setPiece(startX, startY, piece);
+			if (targetPiece != null)
+				board.setPiece(endX, endY, targetPiece);
+			else
+				board.setPiece(endX, endY, null);
+			return true;
+		}
+
 		return false;
 	}
 }

@@ -2,7 +2,7 @@ package code;
 
 import java.util.Scanner;
 
-public class Run_Chinese_Chess {
+public class RunChineseChess {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);

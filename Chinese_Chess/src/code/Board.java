@@ -72,16 +72,16 @@ public class Board {
 	public void drawBoard() {
 		for (int i = 0; i < col; i++) {
 			if (i == 0)
-				System.out.print("   ");
+				System.out.print("    ");
 			System.out.print(" " + (i + 1));
 		}
 		for (int i = 0; i < row; i++) {
 			if (i == 0)
-				System.out.print("\n   -------------------\n");
+				System.out.print("\n    ___________________\n");
 			if (i != 9)
-				System.out.print(" " + (i + 1) + "| ");
+				System.out.print(" " + (i + 1) + " | ");
 			else
-				System.out.print("10| ");
+				System.out.print("10 | ");
 			for (int j = 0; j < col; j++) {
 				if (board[i][j] == null) {
 					System.out.print(". ");
@@ -91,7 +91,7 @@ public class Board {
 			}
 			System.out.print("|\n");
 		}
-		System.out.print("   -------------------\n\n");
+		System.out.print("    " + "\u203E".repeat(19) + "\n\n");
 	}
 
 	// Di chuyển quân cờ
@@ -106,62 +106,8 @@ public class Board {
 		}
 	}
 
-	// Kiểm tra xem tướng có bị chiếu không
-	public boolean isInCheck(boolean isRed) {
-		Piece general = findGeneral(isRed);
-		// Kiểm tra nếu có quân đối phương có thể tấn công tướng
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				Piece piece = board[i][j];
-				if (piece != null && piece.isRed != isRed) {
-					if (piece.isValidMove(general.x, general.y, this)) {
-						// Tướng bị chiếu
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	// Kiểm tra xem tướng có bị chiếu bí không
-	public boolean isInCheckMate(boolean isRed) {
-		if (!isInCheck(isRed)) {
-			// Nếu tướng không bị chiếu thì không phải chiếu bí
-			return false;
-		}
-		// Kiểm tra tất cả các quân cờ để tìm nước đi hợp lệ thoát khỏi chiếu
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				Piece piece = board[i][j];
-				if (piece != null && piece.isRed == isRed) {
-					// Kiểm tra tất cả các nước đi hợp lệ của quân cờ này
-					for (int k = 0; k < row; k++) {
-						for (int l = 0; l < col; l++) {
-							if (piece.isValidMove(k, l, this)) {
-								Piece tempPiece = board[k][l];
-								board[k][l] = piece;
-								board[i][j] = null;
-								if (!isInCheck(isRed)) {
-									board[i][j] = piece;
-									board[k][l] = tempPiece;
-									// Không phải chiếu bí
-									return false;
-								}
-								board[i][j] = piece;
-								board[k][l] = tempPiece;
-							}
-						}
-					}
-				}
-			}
-		}
-		// Không có nước đi nào hợp lệ để thoát chiếu => chiếu bí
-		return true;
-	}
-
 	// Tìm vị trí của tướng
-	private Piece findGeneral(boolean isRed) {
+	public Piece findGeneral(boolean isRed) {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (board[i][j] != null && board[i][j].isRed == isRed && board[i][j] instanceof General) {
