@@ -8,7 +8,7 @@ public class Elephant extends Piece {
 	// Hiển thị quân tượng ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "E" + reset : blue + "E" + reset;
+		return isRed ? Color.red + "E" + Color.reset : Color.blue + "E" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

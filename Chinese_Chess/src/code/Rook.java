@@ -8,7 +8,7 @@ public class Rook extends Piece {
 	// Hiển thị quân xe ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "R" + reset : blue + "R" + reset;
+		return isRed ? Color.red + "R" + Color.reset : Color.blue + "R" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

@@ -8,7 +8,7 @@ public class Soldier extends Piece {
 	// Hiển thị quân tốt ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "S" + reset : blue + "S" + reset;
+		return isRed ? Color.red + "S" + Color.reset : Color.blue + "S" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

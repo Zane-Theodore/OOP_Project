@@ -19,7 +19,7 @@ public class Run_Chinese_Chess {
 			System.out.print("Nhập Y/y để bắt đầu trò chơi: ");
 			button = sc.nextLine();
 			if (button.isEmpty() || !button.equalsIgnoreCase("y"))
-				System.out.println("Nhập lại.");
+				System.out.println(Color.lightYellow + "Nhập lại." + Color.reset);
 		} while (button.isEmpty() || !button.equalsIgnoreCase("y"));
 		// Bắt đầu trò chơi
 		Game newGame = new Game();

@@ -7,12 +7,6 @@ public abstract class Piece {
 	protected int y;
 	// Kiểm tra xem quân cờ phải quân đỏ hay không
 	protected boolean isRed;
-	// mã màu đỏ, tượng trưng cho quân đỏ
-	protected String red = "\u001B[31m";
-	// mã màu xanh tượng trưng cho quân xanh
-	protected String blue = "\u001B[34m";
-	// mã dùng để reset lại màu
-	protected String reset = "\u001B[0m";
 
 	public Piece(int x, int y, boolean isRed) {
 		this.x = x;

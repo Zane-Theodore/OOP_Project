@@ -8,7 +8,7 @@ public class General extends Piece {
 	// Hiển thị quân tướng lên màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "G" + reset : blue + "G" + reset;
+		return isRed ? Color.red + "G" + Color.reset : Color.blue + "G" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

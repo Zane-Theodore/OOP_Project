@@ -8,7 +8,7 @@ public class Advisor extends Piece {
 	// Hiển thị quân sĩ ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "A" + reset : blue + "A" + reset;
+		return isRed ? Color.red + "A" + Color.reset : Color.blue + "A" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

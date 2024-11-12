@@ -8,7 +8,7 @@ public class Cannon extends Piece {
 	// Hiển thị quân pháo ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "C" + reset : blue + "C" + reset;
+		return isRed ? Color.red + "C" + Color.reset : Color.blue + "C" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không

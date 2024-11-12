@@ -8,7 +8,7 @@ public class Horse extends Piece {
 	// Hiển thị quân mã ra màn console
 	@Override
 	public String toString() {
-		return isRed ? red + "H" + reset : blue + "H" + reset;
+		return isRed ? Color.red + "H" + Color.reset : Color.blue + "H" + Color.reset;
 	}
 
 	// Kiểm tra nước đi có hợp lệ hay không
