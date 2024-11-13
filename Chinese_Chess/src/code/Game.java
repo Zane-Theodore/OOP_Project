@@ -319,30 +319,30 @@ public class Game {
 	private boolean movePieceAndCheckMove() {
 		// Di chuyển quân cờ
 		board.movePiece(startX, startY, endX, endY);
-		// Kiểm tra
+		// Kiểm tra sau nước đi đó có bị chiếu hay không
 		if (isInCheck(isRedTurn)) {
 			System.out.println(Color.yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ CHIẾU, HÃY XEM XÉT LẠI." + Color.reset);
-			// Nếu nước đi khiến người chơi bị chiếu
-			// Hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
-			board.setPiece(startX, startY, piece);
-			if (targetPiece != null)
-				board.setPiece(endX, endY, targetPiece);
-			else
-				board.setPiece(endX, endY, null);
+			undoMove();
 			return true;
 		}
+		// Kiểm tra sau nước đi đó có bị lộ tướng hay không
 		if (isGeneralInLineOfSight()) {
 			System.out
 					.println(Color.yellow + "\nNƯỚC ĐI NÀY KHIẾN BẠN BỊ LỘ MẶT TƯỚNG, HÃY XEM XÉT LẠI." + Color.reset);
-			// Hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
-			board.setPiece(startX, startY, piece);
-			if (targetPiece != null)
-				board.setPiece(endX, endY, targetPiece);
-			else
-				board.setPiece(endX, endY, null);
+
+			undoMove();
 			return true;
 		}
 
 		return false;
+	}
+
+	// Hàm hoàn tác nước đi và đặt lại quân cờ mục tiêu đã bị ăn mất (nếu có)
+	private void undoMove() {
+		board.setPiece(startX, startY, piece);
+		if (targetPiece != null)
+			board.setPiece(endX, endY, targetPiece);
+		else
+			board.setPiece(endX, endY, null);
 	}
 }
