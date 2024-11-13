@@ -1,4 +1,6 @@
-package code;
+package model;
+
+import board.Board;
 
 public class Elephant extends Piece {
 	public Elephant(int x, int y, boolean isRed) {

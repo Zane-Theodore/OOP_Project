@@ -1,4 +1,6 @@
-package code;
+package model;
+
+import board.Board;
 
 public class Cannon extends Piece {
 	public Cannon(int x, int y, boolean isRed) {

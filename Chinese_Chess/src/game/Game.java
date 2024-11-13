@@ -1,5 +1,8 @@
-package code;
+package game;
 
+import model.Color;
+import model.Piece;
+import board.Board;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -182,7 +185,7 @@ public class Game {
 					System.out.println("Vị trí không hợp lệ.");
 				} else if (board.getPiece(startX, startY) == null) {
 					System.out.println(Color.lightYellow + "Vị trí bạn chọn không có quân cờ nào." + Color.reset);
-				} else if (board.getPiece(startX, startY).isRed != isRedTurn) {
+				} else if (board.getPiece(startX, startY).getIsRed() != isRedTurn) {
 					System.out.println(Color.lightYellow + "Quân cờ đó không phải của bạn." + Color.reset);
 				} else {
 					isValidValue = true;
@@ -205,7 +208,8 @@ public class Game {
 				endY = sc.nextInt() - 1;
 				if (!isValidPosition(endX, endY) || !piece.isValidMove(endX, endY, board)) {
 					System.out.println(Color.lightYellow + "Vị trí không hợp lệ." + Color.reset);
-				} else if ((board.getPiece(endX, endY) != null) && (board.getPiece(endX, endY).isRed == isRedTurn)) {
+				} else if ((board.getPiece(endX, endY) != null)
+						&& (board.getPiece(endX, endY).getIsRed() == isRedTurn)) {
 					System.out.println(Color.lightYellow + "Không thể di chuyển quân cờ đến vị trí này." + Color.reset);
 				} else {
 					isValidValue = true;
@@ -245,10 +249,10 @@ public class Game {
 		Piece redGeneral = board.findGeneral(true);
 		Piece blueGeneral = board.findGeneral(false);
 		// Kiểm tra nếu hai tướng nằm trên cùng một cột
-		if (redGeneral.y == blueGeneral.y) {
-			int start = redGeneral.x + 1;
-			int end = blueGeneral.x;
-			int y = redGeneral.y;
+		if (redGeneral.getY() == blueGeneral.getY()) {
+			int start = redGeneral.getX() + 1;
+			int end = blueGeneral.getX();
+			int y = redGeneral.getY();
 			// Kiểm tra xem có quân cờ nào chặn giữa hai tướng hay không
 			for (int i = start; i < end; i++) {
 				if (board.getPiece(i, y) != null) {
@@ -268,8 +272,8 @@ public class Game {
 		for (int i = 0; i < board.getRow(); i++) {
 			for (int j = 0; j < board.getCol(); j++) {
 				Piece piece = board.getPiece(i, j);
-				if (piece != null && piece.isRed != isRed) {
-					if (piece.isValidMove(general.x, general.y, board)) {
+				if (piece != null && piece.getIsRed() != isRed) {
+					if (piece.isValidMove(general.getX(), general.getY(), board)) {
 						// Tướng bị chiếu
 						return true;
 					}
@@ -289,7 +293,7 @@ public class Game {
 		for (int i = 0; i < board.getRow(); i++) {
 			for (int j = 0; j < board.getCol(); j++) {
 				Piece piece = board.getPiece(i, j);
-				if (piece != null && piece.isRed == isRed) {
+				if (piece != null && piece.getIsRed() == isRed) {
 					// Kiểm tra tất cả các nước đi hợp lệ của quân cờ này
 					for (int k = 0; k < board.getRow(); k++) {
 						for (int l = 0; l < board.getCol(); l++) {

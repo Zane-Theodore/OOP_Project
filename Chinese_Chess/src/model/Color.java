@@ -1,4 +1,4 @@
-package code;
+package model;
 
 public class Color {
 	// Mã màu vàng dành cho những cảnh báo

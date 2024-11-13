@@ -1,4 +1,6 @@
-package code;
+package model;
+
+import board.Board;
 
 public class General extends Piece {
 	public General(int x, int y, boolean isRed) {

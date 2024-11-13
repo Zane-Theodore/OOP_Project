@@ -1,4 +1,6 @@
-package code;
+package board;
+
+import model.*;
 
 public class Board {
 	private int row = 10;
@@ -63,8 +65,8 @@ public class Board {
 	public void setPiece(int x, int y, Piece piece) {
 		board[x][y] = piece;
 		if (piece != null) {
-			board[x][y].x = x;
-			board[x][y].y = y;
+			board[x][y].setX(x);
+			board[x][y].setY(y);
 		}
 	}
 
@@ -101,8 +103,8 @@ public class Board {
 		if (piece != null && piece.isValidMove(endX, endY, this)) {
 			board[endX][endY] = piece;
 			board[startX][startY] = null;
-			board[endX][endY].x = endX;
-			board[endX][endY].y = endY;
+			board[endX][endY].setX(endX);
+			board[endX][endY].setY(endY);
 		}
 	}
 
@@ -110,7 +112,7 @@ public class Board {
 	public Piece findGeneral(boolean isRed) {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				if (board[i][j] != null && board[i][j].isRed == isRed && board[i][j] instanceof General) {
+				if (board[i][j] != null && board[i][j].getIsRed() == isRed && board[i][j] instanceof General) {
 					return board[i][j];
 				}
 			}

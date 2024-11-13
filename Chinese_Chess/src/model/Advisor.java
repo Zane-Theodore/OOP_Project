@@ -1,4 +1,6 @@
-package code;
+package model;
+
+import board.Board;
 
 public class Advisor extends Piece {
 	public Advisor(int x, int y, boolean isRed) {

@@ -1,4 +1,6 @@
-package code;
+package model;
+
+import board.Board;
 
 public class Rook extends Piece {
 	public Rook(int x, int y, boolean isRed) {

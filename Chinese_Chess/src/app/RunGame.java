@@ -1,15 +1,17 @@
-package code;
+package app;
 
+import game.Game;
+import model.Color;
 import java.util.Scanner;
 
-public class RunChineseChess {
+public class RunGame {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		String button;
 		System.out.println("CHINESE CHESS");
 		System.out.println("Lưu ý trước khi chơi: ");
-		System.out.print("Tọa độ các quân cờ được đánh từ 0 -> 8 đối với hàng ngang và 0 -> 9 đối với hàng dọc\n"
+		System.out.print("Tọa độ các quân cờ được đánh từ 1 -> 9 đối với hàng ngang và 1 -> 10 đối với hàng dọc\n"
 				+ "Các quân cờ được viết tắt ở dạng chữ cái đầu trong tên:\n" + "Tướng: General  (G)\n"
 				+ "Sĩ   : Advisor  (A)\n" + "Tượng: Elephant (E)\n" + "Mã   : Horse    (H)\n" + "Xe   : Rook     (R)\n"
 				+ "Pháo : Cannon   (C)\n" + "Tốt  : Soldier  (S)\n");
